@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 Smart Fertilizer Recommendation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-header {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .main-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .main-area {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .result-box h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-box h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            margin: 1rem 0;
+        }
+
+        .summary-section {
+            margin-bottom: 2rem;
+        }
+
+        .summary-section h4 {
+            color: #374151;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .summary-item .label {
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-item .value {
+            font-size: 1.2rem;
+            color: #374151;
+            font-weight: 700;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            margin: 1rem 0;
+        }
+
+        .info-box h4 {
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+
+        .info-box p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .demo-note {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="main-header">
+            <h1>🌾 Smart Fertilizer Recommendation System</h1>
+            <p>Get personalized fertilizer suggestions based on soil and crop conditions using AI</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <h3>📊 Input Parameters</h3>
+                <p style="color: #6b7280; margin-bottom: 1rem;">Enter your soil and crop details:</p>
+                
+                <div class="form-group">
+                    <label>🌡️ Temperature (°C)</label>
+                    <input type="number" class="form-control" value="25.0" min="0" max="50" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>💧 Humidity (%)</label>
+                    <input type="number" class="form-control" value="60.0" min="0" max="100" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>🌱 Moisture (%)</label>
+                    <input type="number" class="form-control" value="40.0" min="0" max="100" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>🧱 Soil Type</label>
+                    <select class="form-control">
+                        <option>Sandy</option>
+                        <option selected>Loamy</option>
+                        <option>Black</option>
+                        <option>Red</option>
+                        <option>Clayey</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>🌿 Crop Type</label>
+                    <select class="form-control">
+                        <option>Maize</option>
+                        <option selected>Sugarcane</option>
+                        <option>Cotton</option>
+                        <option>Tobacco</option>
+                        <option>Paddy</option>
+                        <option>Barley</option>
+                        <option>Millets</option>
+                        <option>Oil seeds</option>
+                        <option>Pulses</option>
+                        <option>Ground Nuts</option>
+                        <option>Wheat</option>
+                    </select>
+                </div>
+
+                <h3 style="margin-top: 2rem;">🔬 Soil Nutrient Levels</h3>
+                
+                <div class="form-group">
+                    <label>Nitrogen (N)</label>
+                    <input type="number" class="form-control" value="20" min="0" max="50">
+                </div>
+
+                <div class="form-group">
+                    <label>Phosphorus (P)</label>
+                    <input type="number" class="form-control" value="15" min="0" max="50">
+                </div>
+
+                <div class="form-group">
+                    <label>Potassium (K)</label>
+                    <input type="number" class="form-control" value="10" min="0" max="50">
+                </div>
+
+                <button class="btn-primary">🔍 Get Fertilizer Recommendation</button>
+            </div>
+
+            <!-- Main Area -->
+            <div class="main-area">
+                <h2>🎯 Get Your Recommendation</h2>
+                
+                <div class="demo-note">
+                    <strong>🎭 Demo Mode:</strong> This is a preview of how your Streamlit app will look. 
+                    Click the button to see the recommendation interface.
+                </div>
+
+                <!-- Sample Result (shown by default for demo) -->
+                <div class="result-box">
+                    <h2>🎯 Recommended Fertilizer</h2>
+                    <h1>DAP</h1>
+                    <p><strong>DAP (Diammonium Phosphate)</strong></p>
+                    <p>Quick nitrogen supply and enhances root strength.</p>
+                </div>
+
+                <!-- Input Summary -->
+                <div class="summary-box">
+                    <h4 style="color: #374151; margin-bottom: 1rem;">📋 Input Summary</h4>
+                    
+                    <div class="summary-section">
+                        <h4>📊 Environmental Conditions</h4>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="label">🌡️ Temperature</div>
+                                <div class="value">25.0°C</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label">💧 Humidity</div>
+                                <div class="value">60.0%</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label">🌱 Moisture</div>
+                                <div class="value">40.0%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <h4>📊 Soil & Crop</h4>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="label">🧱 Soil Type</div>
+                                <div class="value">Loamy</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label">🌿 Crop Type</div>
+                                <div class="value">Sugarcane</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <h4>📊 Nutrient Levels (N-P-K)</h4>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="label">🔵 Nitrogen (N)</div>
+                                <div class="value">20</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label">🟡 Phosphorus (P)</div>
+                                <div class="value">15</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label">🟢 Potassium (K)</div>
+                                <div class="value">10</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="info-box">
+                    <h4>💡 About Your Recommendation</h4>
+                    <p>The AI model analyzed your soil conditions and crop type to recommend the optimal fertilizer. 
+                    This recommendation considers temperature, humidity, moisture, soil type, crop type, and current nutrient levels.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; color: white; padding: 2rem; margin-top: 2rem;">
+            <p>🌱 Powered by Machine Learning • Built with Streamlit</p>
+            <p>Get the best fertilizer recommendations for optimal crop growth!</p>
+        </div>
+    </div>
+
+    <script>
+        // Demo functionality
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            alert('🎉 This is a demo interface! In the real Streamlit app, this would generate a fertilizer recommendation based on your inputs.');
+        });
+    </script>
+</body>
+</html>
+
+
+
